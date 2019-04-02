@@ -1,0 +1,856 @@
+{# \pgidf\another-theme\resources\views\partials\products_page.twig #}
+{# Produits page catalogue #}
+<style>
+    /*********************** market ***********************/
+    ul.products-tags {
+        margin: 20px 0;
+    }
+    .products-tags button  {
+        margin-bottom:4px;
+    }
+    .cart-buttons {
+        float: left;
+        margin-right: 4px;
+        margin-bottom:4px;
+        /* top: -10px; */
+        position: relative;
+    } 
+    .products div.card {
+        border: #6B542A 1px solid;/*  */
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        text-align: center;
+        margin-bottom: 20px;
+        /* min-height: 124px; */
+        padding: 1px;
+        background-color: white;
+        overflow: hidden;
+    }
+    img.product-img {
+        width: 100%;
+    } 
+    .products>div {
+        /* height: 288px; */
+    }
+    h5.card-title {
+        height: 30px;
+        padding: 0;
+        margin: 6px;
+        overflow: hidden;
+    }
+    .products .card-body {
+        margin: 5px;
+        text-align: center;
+        /* height: 228px; */
+    }
+    p.card-text {
+        margin: 0;
+    }
+    .card-body .text {
+        height: 80px; 
+        overflow: hidden;
+    }
+    .card-body-text {
+        height: 218px;
+        position: relative;
+        top: -240px;
+        max-height: 0px;
+        width: 100%;
+    }
+    .card-body-text h5 {
+        margin:0;
+    }
+    .card-body-text p {
+        font-size: smaller;
+    }
+    .card-body-subtotal {
+        height: 28px; 
+    }
+    .card .text-muted {
+        float:left;
+        height: 20px;
+        overflow: hidden;
+    }
+    .card .price { 
+        color: #b4bcc2;
+    } 
+    .card .price, .card .subtotal {
+        font-size: xx-large; 
+        margin-bottom: 0; 
+        position: relative; 
+        top: -10px;
+    } 
+    .card .price span, .card .subtotal span {
+        font-size:medium;
+        top: -10px;
+        position:relative;
+    }
+    .card-body-subtotal > a {
+        float: left;
+        padding-left: 6px;
+        padding-top: 4px;
+    }
+    .incart>div.card{
+        border: #18bc9c solid 1px;
+        background: #e7e8e3;
+    }
+    .products .input-group {
+        width: 100%;
+    } 
+    .no-stock p {
+        overflow: hidden;
+        color: red;
+        font-weight: bold;
+    }
+    /*********************** products order form ***********************/
+    .order-form-container {
+        padding-top: 10px;
+    }
+    .order-form label {
+        height: 2.4em;
+        vertical-align: bottom;
+    }
+    .datetime span.input-group-addon {
+        display: none;
+    }
+    .datetime .date {
+        overflow: hidden;
+    }
+    button[name=commander] {
+        width: 100%;
+    }
+    /*********************** .cartlist ***********************/
+    ul.cartlist { 
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .cartlist li {
+        border-bottom: #CECAB4 dotted 1px;
+        list-style: none;
+        font-family: 'Satisfy', cursive;
+        letter-spacing: 0px;
+        font-size: 28px;
+        line-height: 36px;
+        margin-top: 2px;
+        color: #6B542A;
+    }
+    .cartlist button {
+        float: right;
+    }
+    .cartlist li:hover {
+        color: #f39c12;
+    }
+    /*********************** .carttotal ***********************/
+    .products-container .carttotal,
+    .order-form-container .carttotal {
+        top: -2px;
+        margin-right: 6px;
+    }
+    .carttotal {
+        /* top: -10px; */
+        /* position: relative; */
+        display: inline;
+        /* float: left; */
+        /* left: 8px; */
+        font-weight: normal;
+        font-size: x-large;
+    }
+    .carttotal span {
+        font-family: 'Satisfy', cursive;
+        font-size: xx-large;
+        top: 8px;
+        position: relative;
+    }
+    .carttotal.top {
+        top: -8px;
+        color: white;
+        font-size: x-large;
+        /* top: 6px; */
+        position: relative;
+        float: left;
+    }
+    .carttotal.top span {
+        font-size: 1.9em;
+        top: 14px;
+    } 
+</style>
+{{ page.content.render|raw }} 
+{{ page.raw_text|raw }}  
+<div>
+    {################ FORM PARAMS ################### #}
+    {% set form = form('contact')
+	.fields({ 
+		'date': { 'placeholder': 'Date', 'type': 'anomaly.field_type.datetime', 'required': true, 'config':{'step':'15', 'picker': true} }, 
+		'mobile': { 'placeholder': 'Votre numéro de téléphone', 'type': 'anomaly.field_type.text', 'required': true, 'attributes': {'aria-required':'true', 'aria-type':'phone'}  }, 
+		'name': { 'placeholder': 'Votre nom', 'type': 'anomaly.field_type.text', 'required': true, 'attributes': {'aria-required':'true'} }, 
+		'email': { 'placeholder': 'Votre email', 'type': 'anomaly.field_type.email', 'required': true, 'attributes': {'aria-required':'true', 'aria-type':'email'}  }, 
+		'subject': { 'placeholder': 'subject', 'type': 'anomaly.field_type.text', 'required': true, 'value': 'Commande ' },
+		'comment': { 'type': 'anomaly.field_type.textarea', 'required': true } }
+	) 
+	.subject('{subject}') 
+	.messageView('pgidf.theme.another::email/commande')
+	.to( '{email}' )  
+        .cc('cde.paniergourmandidf@gmail.com') 
+        .bcc('radjal@free.fr')  
+	.redirect('commandepasse') 
+	.from('cde.paniergourmandidf@gmail.com').get %} 
+
+    {#           
+        .subject('Commande ') 
+        .cc( 'radjal@free.fr' ) 
+        .bcc('r4dj4l@gmail.com')  
+        .to({ 'raj free':'radjal@free.fr' , 'raj gmail':'r4dj4l@gmail.com'  } ) 
+        .bcc('radjal@free.fr')  
+        .cc('radjal@free.fr')  
+        'comment': { 'placeholder': 'Votre commande', 'type': 'anomaly.field_type.textarea', 'required': true } } 
+    #} 
+</div> 
+{# ################# PRODUCTS  ###################### #} 
+<div class="products-container">
+    {####### ############################ ###################### #} 
+    <div class="cart-buttons">
+        <button class="btn btn-lg btn-warning disabled" name="panier" type="button" onclick="$('.products-container, .order-form-container').toggle()"
+                title="Poursuivre la commande">
+            <i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;&nbsp;Commander 
+        </button>    
+
+        <button class="btn btn-lg disabled" name="toggle-selected" type="button" onclick="products_show_toggle(this)"
+                title="Afficher uniquement les produits dans le panier">
+            <i class="glyphicon glyphicon-equalizer"></i>&nbsp;&nbsp;Panier
+        </button>    
+
+        {# TODO...
+                <div class="form-group col-sm-5">  
+                        <input type="text" name="search" placeholder="Rechercher" />
+                </div>
+        #}
+
+        <button class="btn btn-lg " type="button"  name="toggle-cats" onclick="
+                if ($(this).attr('data-state') == 'show') {
+                    $('.products-tags button').addClass('active btn-info');
+                    $('.products>div').show();
+                    $(this).attr('data-state', 'hide');
+                } else {
+                    $('.products-tags button').removeClass('active btn-info');
+                    $('.products>div').hide();
+                    $(this).attr('data-state', 'show');
+                }
+                "
+                title="Afficher/masquer les catégories"
+                ><i class="glyphicon glyphicon-eye-close"></i>&nbsp;&nbsp;Catégories</button>
+
+    </div>
+    <!-- <div class="carttotal "></div> -->
+    {# ##################### CATEGORIES  ######################## #}  
+    <ul class="products-tags nav nav-pills"></ul> 
+    {# ##################### PRODUCTS  ######################## #} 
+    <div class="row products">
+        {# type id = 2 for market posts #}
+        {% set posts = entries('posts')
+            .where('type_id', 2)
+            .where('enabled', true)
+            .get() %} 
+        {% for post in posts %}
+            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-3" id="p-{{ post.id }}">
+                <div class="card " 
+                     data-price="{{ post.prix_produit }}" 
+                     data-id="{{ post.id }}" 
+                     data-unit="{{ post.conditionnement }}" 
+                     data-categorie="{{ post.categorie_produit.value }}" 
+                     data-categorie-slug="{{ post.categorie_produit|replace({ (' '): '' }) }}" 
+                     data-name="{{ post.title }}">
+                    <div class="image"> 
+                        {{ post.image_produit.image().fit(260, 140).class('product-img')|raw}}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ post.title }} 
+                        </h5> 
+                        <small class="text-muted"> 
+                            {% if post.categorie_produit %}<strong>{{ post.categorie_produit.value }}</strong>{%endif%}  
+                            {% if post.poids_produit|length > 0 %}{{ post.poids_produit }} {%endif%} 
+                            &nbsp;
+                        </small>  
+                    </div>
+
+                    {# ##################### INPUT  ######################## #} 
+                    <div class="form-group amount">
+                        {%if post.en_stock.value%}
+                            <div class="input-group">
+                                <a class="control-minus input-group-addon "><em class="glyphicon glyphicon-minus"></em></a>
+                                <!-- <input id="p-{{ post.id }}" class="form-control" name="amount" placeholder="Quantité" type="number">
+                                <input id="p-{{ post.id }}" class="form-control" name="amount" placeholder="Quantité" type="text"> -->
+                                
+                                <input id="p-{{ post.id }}" class="form-control" name="amount" 
+                                       {%if post.conditionnement =="kilo" %}
+                                            type="text"
+                                       {% elseif post.conditionnement =="liter" %}
+                                            type="text"
+                                       {% else %}
+                                            type="number"
+                                       {% endif %}
+                                       placeholder="Quantité" >
+                                <span class="input-group-addon ">
+                                    <a class="control-plus "><em class="glyphicon glyphicon-plus"></em></a>
+                                </span> 
+                            </div> 
+                        {%else%}
+                            <div class="input-group no-stock"> 
+                                <input type="hidden" value="0" name="amount" />
+                                <p class="form-control form-control-static">{{post.en_stock.label|raw}}</p>
+                            </div> 
+                        {%endif%}
+                    </div> 
+
+                    <div class="card-body-subtotal clearfix">
+                        <p class="subtotal"></p>
+                        <p class="price">{{ post.prix_produit.value|number_format(2, ',') }}<span>€</span></p>
+                        {#  
+                        <a onclick="$('#p-{{ post.id }} .card-body, #p-{{ post.id }} .card-body-text, #p-{{ post.id }} .product-img').toggleClass('hidden');"><i class="glyphicon glyphicon-info-sign"></i></a>
+                        #}
+                    </div>
+
+                    <div class="card-body-text hidden">
+                        <h5>
+                            {{ post.title }} 
+                        </h5> 
+                        {% autoescape false %}
+                            {% if post.summary|trim|striptags~post.content|trim|length > 252 %}{{'<span>'~ post.summary|trim|raw ~'</span>'~ post.content|trim|slice(0, 250)|raw ~ '...' }} 
+                            {%else%} {{ '<span>'~ post.summary|trim|raw ~'</span>'~ post.content|trim|raw }} {%endif%}  
+                        {% endautoescape %}
+                        {# 
+                         {{ post.summary.value|trim|striptags|raw ~' '~ post.content|trim|striptags|raw }}
+                        {% if post.content|length > 252 %}<br>{{ post.content|trim|striptags|slice(0, 250) ~ '...' }} {%else%} {{ post.content|trim|striptags }} {%endif%}  
+                        {% if post.categorie %}<strong>{{ post.categorie }}</strong>{%endif%} 
+                        <br>{{ post.prix_produit }} € 
+                        {% if post.poids_produit|length > 0 %}<br>{{ post.poids_produit }} {%endif%} 
+                        {{ post.content|striptags }}
+                        #} 
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="order-form-container" style="display:none;">
+    {# #################### FORM BACK BTN ############################ #} 
+    <button class="btn btn-lg btn-default " name="retour-panier" type="button" onclick="$('.products-container, .order-form-container').toggle()">
+        <i class="glyphicon glyphicon-chevron-left"></i>&nbsp;&nbsp;Marché  <!-- <div class="carttotal "></div> -->
+    </button>  
+    {# ##################### FORM  ######################## #}  
+    <div class="order-form">
+        {{ form.open|raw }}
+        <p>&nbsp;</p>
+        <div class="row">
+            <div class="form-group datetime col-sm-4 ">
+                <label for="date">Quel jour souhaitez vous venir?</label>
+                {{ form.fields.date.input|raw }} 
+                <div class="input-group date-dummy hidden">
+                    <a onclick="$(' .datetime .input-group').toggleClass('hidden');
+                            $('input[name=date]').val('');
+                            $('select.day-period').html('')" class="input-group-addon"><i class="fa fa-times"></i></a>
+                    <p class="date form-control form-control-static"></p>
+                </div>
+            </div>  
+
+            <div class="form-group col-sm-3 day-periods">
+                <label for="date">A quel heure?</label>
+                <select class="day-period form-control" ></select>
+
+            </div>
+            <div class="form-group col-sm-5"> 
+                <label for="name">Votre nom</label>
+                {{ form.fields.name.input|raw }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="mobile">Votre numéro de téléphone</label>
+                {{ form.fields.mobile.input|raw }}
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="date">Votre email</label>
+                {{ form.fields.email.input|raw }}
+            </div>
+        </div>
+        {####### ############# ACTION BTNS ###################### #} 
+        {# form.actions|raw #}  {# inactive for html button #}  
+        <button class="btn btn-lg btn-warning " name="commander" type="button">
+            <i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;&nbsp;Commander 
+            <div class="carttotal "></div>
+        </button>
+
+        <div class="row">
+            <div class=" col-md-12">
+                <ul class="cartlist"></ul>  
+            </div> 
+        </div>
+        <div class="form-group hidden">
+            {{ form.fields.subject.input|raw }}
+        </div>
+        <div class="form-group hidden">
+            {{ form.fields.comment.input|raw }}
+        </div>  
+        {{ form.close|raw }}
+    </div> 
+</div>
+{######################### JAVASCRIPT ###########################}
+<script type="text/javascript">
+    {# ############## FUNCTIONS #################### #}
+        /*************** cart **************/
+        function cart()
+        {
+            $('.cartlist').html('');
+            var list = [];
+            var listtxt = '';
+            var total = 0;
+            $(".products div.card ").each(function (index) {
+                //var amount = Number.parseFloat($(this).find("input").val()).toFixed(2);
+                var amount = $(this).find("input").val().replace(',', '.');
+                var price = Number.parseFloat($(this).attr("data-price")).toFixed(2);
+                if (amount > 0)
+                {    
+                    var unit = $(this).attr("data-unit") ;
+                    var wholeno = unit == 'kilo' || unit == 'liter' ? 0 : 1 ;
+                    amount = wholeno ? amount : Number.parseFloat( amount ).toFixed(2);
+                    //console.log(amount);
+                    var id = $(this).attr("data-unit");
+                    var name = $(this).attr("data-name").toLowerCase();
+                    var subtotal = parseFloat(amount * price).toFixed(2).replace('.', ',');
+                    total = parseFloat(parseFloat(total) + parseFloat(subtotal)).toFixed(2).replace('.', ','); 
+                    var item = {'id': id, 'amount': amount, 'price': price, 'subtotal': subtotal};
+                    list.push(item); //store
+                    var formatedamount = wholeno ? amount : amount.replace('.', ','); 
+                    listtxt += `<p><span>${formatedamount}  X ${name}</span> - ${subtotal}€` + "</p>\r\n"; //( [${id}] ${amount} x ${price} = ${subtotal}€ )  `+"</p>\r\n"; 
+                    /* output */
+                    var btn = `<button onclick="cart_remove(${id});" class="btn btn-sm btn-danger" type="button" title="Retirer de la liste"><i class="glyphicon glyphicon-trash"></i></button>`;
+                    $('.cartlist').append(`<li>${formatedamount} x ${name} - ${subtotal}€ ${btn}</li>`); 
+                    $(this).find('.subtotal').html(subtotal.replace('.', ',') + '<span>€</span>');
+                    $(this).find('.price').text(''); //reset price amount 
+                    $(this).parent().addClass('incart');
+                } else {
+                    $(this).find('.subtotal').text(''); //reset subtotal amount
+                    $(this).find('.price').html(price.replace('.', ',') + '<span>€</span>'); //reset price amount 
+                    $(this).parent().removeClass('incart');
+                }
+            });
+            /* finish */
+            listtxt += 'Total ' + total + '€';
+            $('form textarea').val(listtxt);
+            $('.carttotal').html('<span>' + total + '</span>€');
+            /* clean view if total = 0 */
+            if (total <= 0)
+            {
+                $('#topbtn').hide();
+                //  $('[name=panier],[name=toggle-selected]').addClass('disabled');
+            } else { 
+                $('#topbtn').show(); 
+                $('.products-container button').removeClass('disabled');
+            }
+            return {total, list};
+        }
+        function cart_remove(id)
+        {
+            console.log('cart_remove() ');
+            if (id > 0)
+            {
+                $(this).parent().slideUp();
+                $(`input#p-${id}`).val(0);
+                cart();
+            }
+        }
+        function cart_send(ev)
+        {
+            ev.preventDefault();
+            console.log(' cart_send()');
+            //check vars
+            var date = $('input[name=date]').val();
+            date = typeof (date) !== 'undefined' && date.length > 9 ? true : false;
+            var time = $('.day-period option:selected').val();
+            time = typeof (time) !== 'undefined' && time.length > 4 ? true : false;
+            var name = $('input[name=name]').val();
+            name = typeof (name) !== 'undefined' && name.length > 3 ? true : false;
+            var mobile = $('input[name=mobile]').val()
+            mobile = typeof (mobile) !== 'undefined' && mobile.length > 9 ? true : false;
+            var email = $('input[name=email]').val();
+            email = typeof (email) !== 'undefined' && email.length > 3 ? true : false;
+            //submit
+            if (name && mobile && email && date && time)
+            {
+                $('form input[name=date]').val($('input[name=date]').val() + ' ' + $('.day-period option:selected').val());
+                console.log($('input[name=date]').val() + ' ' + $('.day-period option:selected').val());
+                console.log($('form input[name=date]').val());
+                $('form input[name=subject]').val('Commande pour le ' + $('input[name=date]').val());
+                console.log($('form input[name=subject]').val());
+                //document.forms[0].submit();
+                $('.order-form form').submit();
+            } else {
+                !date ? $('input[name=date]').parent().addClass('has-error has-feedback') : $('input[name=date]').parent().removeClass('has-error has-feedback');
+                !time ? $('.day-periods').addClass('has-error has-feedback') : $('.day-periods').removeClass('has-error has-feedback');
+                !name ? $('input[name=name]').parent().addClass('has-error has-feedback') : $('input[name=name]').parent().removeClass('has-error has-feedback');
+                !mobile ? $('input[name=mobile]').parent().addClass('has-error has-feedback') : $('input[name=mobile]').parent().removeClass('has-error has-feedback');
+                !email ? $('input[name=email]').parent().addClass('has-error has-feedback') : $('input[name=email]').parent().removeClass('has-error has-feedback');
+            }
+        }
+        /*************** controls plus/minus **************/
+        function add()
+        { 
+            var val = $(this).parent().siblings('input').val(); 
+            var wholeno =  $(this).parent().siblings('input').attr('type') == "text" ? 0 : 1 ;
+            val = wholeno ? val : val.replace(',', '.');
+            val = typeof (val) === undefined || val == '' ? 0 : val;
+            val = parseFloat(val) + 1; 
+            $(this).parent().siblings('input').val(wholeno ? val : val.toFixed(1).toString().replace('.', ',') );
+            cart(); 
+        }
+        function substract()
+        { 
+            var val = $(this).siblings('input').val(); 
+            val = typeof (val) === undefined || val == '' ? 0 : val; 
+            var wholeno = $(this).siblings('input').attr('type') == "text" ? 0 :1 ;
+            val = wholeno ? val : parseFloat(val.toString().replace(',', '.'));
+            val = val <= 1 ? 0 : val - 1;
+            $(this).siblings('input').val(wholeno ? val : val.toFixed(1).toString().replace('.', ',') );
+            cart(); 
+        }
+        /*************** categories **************/
+        function categories_build()
+        {
+            //console.log( ' categories_build() ');
+            // get categories
+            var listLabel = [];
+            var listSlug = [];
+            $(".products div.card ").each(function (index) {
+                var slug = $(this).attr("data-categorie-slug");
+                if (slug != '' && jQuery.inArray(slug, listSlug) < 0)
+                {
+                    var cat = $(this).attr("data-categorie");
+                    listLabel.push(cat);
+                    listSlug.push(slug);
+                }
+            });
+            //console.log(list); 
+            // build HTML
+            var css = 'class="btn btn-sm btn-info active"';
+            for (var i = 0; i < listSlug.length; i++) {
+                //console.log(listSlug[i]); 
+                let label = listLabel[i];
+                let slug = listSlug[i];
+                $('.products-tags').append(`<li><button ${css} value="${slug}" >${label}</button></li>`)
+            }
+            //return listLabel;
+        }
+        function toggle_cat()
+        {
+            //console.log( ' toggle_cat() '+this.value ); 
+            var active = $(this).hasClass('active'); //btn-success = active
+            if (active)
+            {
+                $(this).removeClass('btn-info active');
+                $('.products div.card').filter(`[data-categorie-slug=${this.value}]`).parent().hide();
+            } else {
+                $(this).addClass('btn-info active');
+                $('.products div.card').filter(`[data-categorie-slug=${this.value}]`).parent().show();
+            }
+        }
+        /*************** cart / toggle selected products **************/
+        function products_show_toggle(el) //panier button
+        {
+            //console.log( ' products_show_toggle() ' );  
+            var active = $(el).hasClass('btn-success');
+            if (active)
+            {
+                $(el).removeClass('btn-success');
+                products_show_all();
+            } else {
+                $(el).addClass('btn-success');
+                products_show_selected();
+            }
+        }
+        function products_show_selected()
+        {
+            //console.log( ' products_show_selected() ' );   
+            $(".products-tags button").removeClass('btn-info active');
+            $("button[name=toggle-cats]").addClass('disabled');
+            $(".products div.card ").each(function (index) {
+                var amount = $(this).find("input").val();
+                amount = amount == '' ? 0 : amount;
+                var id = $(this).attr("data-id");
+                var cat = $(this).attr("data-categorie-slug");
+                if (amount <= 0)
+                {
+                    $(`[data-id=${id}]`).parent().addClass('hidden');
+                    $(`[data-id=${id}]`).parent().removeClass('unhide');
+                } else {
+                    $(`[data-id=${id}]`).parent().addClass('unhide');
+                    if (cat.length > 0)
+                        $(`.products-tags button[value=${cat}]`).addClass('btn-info active');
+                }
+            });
+            $(".products .unhide ").show();
+            $(".products-tags button:not(.active)").addClass('disabled');
+        }
+        function products_show_all()
+        {
+            //console.log( ' selected_show_all() ' );     
+            $(".products > div").removeClass('hidden unhide').show();
+            $(".products-tags button").addClass('btn-info active');
+            $("button[name=toggle-cats], .products-tags button").removeClass('disabled');
+        }
+        function products_show_all_selected() //not used
+        {
+            console.log(' selected_show_all() ');
+
+            $(".products").hide();
+            $(".products .incart").show().removeClass('hidden');
+        }
+        /***************calendar **************/
+        function calendar_time_build(selectedDate)
+        {
+            let step = 30;
+            let day = new Date(selectedDate);
+            dayNo = day.getDay();
+
+
+            var options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+
+
+            //dateReadeable = day.toLocaleDateString('fr-FR');
+            dateReadeable = day.toLocaleDateString('fr-FR', options);
+            $('select.day-period').html('').append('<option>Choisissez</option>'); //reset
+            //console.log(  dayNo );
+            let periods = false;
+            switch (dayNo) {
+                case 1:
+                    periods = horaires['lundi'];
+                    break;
+                case 2:
+                    periods = horaires['mardi'];
+                    break;
+                case 3:
+                    periods = horaires['mercredi'];
+                    break;
+                case 4:
+                    periods = horaires['jeudi'];
+                    break;
+                case 5:
+                    periods = horaires['vendredi'];
+                    break;
+                case 6:
+                    periods = horaires['samedi'];
+                    break;
+                case 0:
+                    periods = horaires['dimanche'];
+                    break;
+            }
+            //console.log(periods); 
+            let clean = [];
+            for (let elem in periods) {
+                let x = periods[elem];
+                clean.push(x.split(':'));
+            }
+            //console.log(clean);  
+            calendar_time_build_periods(clean[0], clean[1], step);
+            if (clean[2])
+                calendar_time_build_periods(clean[2], clean[3], step); // second day period
+            //UI
+            $('select.day-period').focus();
+            $('p.date').text(dateReadeable);
+            $('.datetime .input-group').toggleClass('hidden');
+        }
+        function calendar_time_build_periods(startA, endA, step)
+        {
+            //console.log('calendar_time_build_periods()'); 
+            let start = parseInt(startA[0] + startA[1]);
+            let end = parseInt(endA[0] + endA[1]);
+            let h = parseInt(startA[0]);
+            let m = parseInt(startA[1]);
+            let time = start;
+            while (time < end) {
+                let bStart = ('00' + h).slice(-2) + ':' + ('00' + m).slice(-2);
+                //console.log('block start '+bStart);
+                m = parseInt(m + step);
+                if (m >= 60) {
+                    m = '00';
+                    h++;
+                }
+                let bEnd = ('00' + h).slice(-2) + ':' + ('00' + m).slice(-2);
+                time = parseInt(`${h}${m}`);
+                //console.log('block end   '+bEnd);
+                $('select.day-period ').append(`<option value="${bStart}">${bStart} à ${bEnd}</option>`);
+            }
+        }
+
+    {# ############## OUVERTURE #################### #}
+    {% set o = entries('variables', 'ouverture').first()  %} 
+        var horaires = [];
+        var hideDay = [0, 1, 2, 3, 4, 5, 6]; //disabled all days ORDER IS IMPORTANT! 
+        var selectedDay = false;
+    {# ############# LUNDI ################ #}//lundi
+    {% if (o.h_lun_matin_debut|length > 0 and o.h_lun_matin_fin|length > 0 ) or (o.h_lun_aprem_fin|length > 0     and o.h_lun_aprem_fin|length > 0) %}  
+        hideDay[1] = false;
+        horaires['lundi'] = {
+        {% if (o.h_lun_matin_debut|length > 0 and o.h_lun_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_lun_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_lun_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_lun_aprem_debut|length > 0 and o.h_lun_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_lun_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_lun_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+    {# ############# MARDI ################ #}//mardi
+    {% if (o.h_mar_matin_debut|length > 0 and o.h_mar_matin_fin|length > 0 ) or (o.h_mar_aprem_fin|length > 0     and o.h_mar_aprem_fin|length > 0) %} 
+        hideDay[2] = false;
+        horaires['mardi'] = {
+        {% if (o.h_mar_matin_debut|length > 0 and o.h_mar_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_mar_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_mar_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_mar_aprem_debut|length > 0 and o.h_mar_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_mar_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_mar_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+    {# ############# MERCREDI ################ #}//mercredi
+    {% if (o.h_mer_matin_debut|length > 0 and o.h_mer_matin_fin|length > 0 ) or (o.h_mer_aprem_fin|length > 0     and o.h_mer_aprem_fin|length > 0) %} 
+        hideDay[3] = false;
+        horaires['mercredi'] = {
+        {% if (o.h_mer_matin_debut|length > 0 and o.h_mer_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_mer_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_mer_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_mer_aprem_debut|length > 0 and o.h_mer_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_mer_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_mer_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+    {# ############# JEUDI ################ #}//jeudi
+    {% if (o.h_jeu_matin_debut|length > 0 and o.h_jeu_matin_fin|length > 0 ) or (o.h_jeu_aprem_fin|length > 0     and o.h_jeu_aprem_fin|length > 0) %} 
+        hideDay[4] = false;
+        horaires['jeudi'] = {
+        {% if (o.h_jeu_matin_debut|length > 0 and o.h_jeu_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_jeu_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_jeu_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_jeu_aprem_debut|length > 0 and o.h_jeu_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_jeu_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_jeu_aprem_fin.date('H:i')}}'
+        {% endif %} 
+            };
+    {% endif %}  
+    {# ############# VENDREDI ################ #}//vendredi
+    {% if (o.h_ven_matin_debut|length > 0 and o.h_ven_matin_fin|length > 0 ) or (o.h_ven_aprem_fin|length > 0     and o.h_ven_aprem_fin|length > 0) %} 
+        hideDay[5] = false;
+        horaires['vendredi'] = {
+        {% if (o.h_ven_matin_debut|length > 0 and o.h_ven_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_ven_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_ven_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_ven_aprem_debut|length > 0 and o.h_ven_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_ven_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_ven_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+    {# ############# SAMEDI ################ #}//samedi
+    {% if (o.h_sam_matin_debut|length > 0 and o.h_sam_matin_fin|length > 0 ) or (o.h_sam_aprem_fin|length > 0     and o.h_sam_aprem_fin|length > 0) %} 
+        hideDay[6] = false;
+        horaires['samedi'] = {
+        {% if (o.h_sam_matin_debut|length > 0 and o.h_sam_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_sam_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_sam_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_sam_aprem_debut|length > 0 and o.h_sam_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_sam_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_sam_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+    {# ############# DIMANCHE ################ #}//dimanche
+    {% if (o.h_dim_matin_debut|length > 0 and o.h_dim_matin_fin|length > 0 ) or (o.h_dim_aprem_fin|length > 0     and o.h_dim_aprem_fin|length > 0) %} 
+        hideDay[0] = false;
+        horaires['dimanche'] = {
+        {% if (o.h_dim_matin_debut|length > 0 and o.h_dim_matin_fin|length > 0 ) %}
+                'matin_debut': '{{o.h_dim_matin_debut.date('H:i')}}',
+                'matin_fin': '{{o.h_dim_matin_fin.date('H:i')}}',        {% endif %}
+        {% if (o.h_dim_aprem_debut|length > 0 and o.h_dim_aprem_fin|length > 0 ) %}
+                'aprem_debut': '{{o.h_dim_aprem_debut.date('H:i')}}',
+                'aprem_fin': '{{o.h_dim_aprem_fin.date('H:i')}}',
+        {% endif %} 
+            };
+    {% endif %} 
+            /*
+             /*
+             */
+    {# ############## ONREADY #################### #}
+        /********************* onready *********************/
+        $(document).ready(function ()
+        {
+            /******************** UI **********************/
+            categories_build(); 
+            //add button for cart on top of page
+            $('.carttotal').after(`<a class="bt-link btn btn-lg" id="topbtn" style="display:none" onclick="$('.products-container, .order-form-container').toggle()"><i class="glyphicon glyphicon-shopping-cart"></i></a>`);
+            /******************** calendar **********************/
+            let fp = [];
+            /* get conf from field type data and add some more params */
+            fp["dateFormat"] = "Y-m-d";
+            //fp["dateFormat"]        = $("input[name=date]").attr("data-datetime-format");  
+            fp["minuteIncrement" ] = $("input[name=date]").attr("data-step");
+            fp["minDate" ] = 'today';
+            fp["minTime" ] = '9:00';
+            fp["maxTime" ] = '19:00';
+            fp["time_24hr" ] = true;
+            fp["enableTime" ] = false;
+            fp["onChange"] =
+                    function (selectedDates, dateStr, instance) {
+                        calendar_time_build(selectedDates);
+                    }
+            //fp["inline" ]        = true;
+            fp["disable"] = [
+                function (date) {
+                    //console.log(date.getDay() + '=' + hideDay[date.getDay()]);
+                    // return true to disable
+                    return (
+                            date.getDay() === hideDay[1] || //lundi
+                            date.getDay() === hideDay[2] ||
+                            date.getDay() === hideDay[3] ||
+                            date.getDay() === hideDay[4] ||
+                            date.getDay() === hideDay[5] ||
+                            date.getDay() === hideDay[6] ||
+                            date.getDay() === hideDay[0]    // dimanche
+                            );
+                }
+            ];
+
+            flatpickr("input[name=date]", fp); //mindate not taken into account by fieldtype 
+
+            /******************** bindings for products toggle view **********************/
+            $(".card-body-text").on('click', function () {
+                $(this).addClass('hidden');
+                $(this).siblings('.card .image, .card-body, .amount, .card-body-subtotal').removeClass('invisible');
+            });
+            $(".image img").on('click', function () {
+                $(this).parent().addClass('invisible');
+                $(this).parent().siblings('.card-body, .amount, .card-body-subtotal').addClass('invisible');
+                $(this).parent().siblings('.card-body-text').removeClass('hidden');
+            }); 
+            $(".image img").on('click', function () {
+                $(this).children('.card-body, .amount, .card-body-subtotal').removeClass('invisible');
+                $(this).children('.card-body-text').addClass('hidden');
+            });
+
+
+            $(".products input[name=amount] ").on('blur', cart);
+            /*
+             $(".card-body-text").on('click', function(){
+             //console.log('im');
+             $(this).addClass('hidden');
+             $(this).siblings('.card-body, .card-body-text').addClass('hidden');
+             });*/
+            $("button[name=commander]").on('click', function (ev) {
+                cart_send(ev)
+            });
+            $(".control-plus").on('click', add);
+            $(".control-minus").on('click', substract);
+            $(".products-tags button").on('click', toggle_cat);
+        });
+</script>

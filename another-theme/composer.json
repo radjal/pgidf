@@ -1,0 +1,9 @@
+{
+    "name": "pgidf/another-theme",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "Pgidf\\AnotherTheme\\": "src/"
+        }
+    }
+}

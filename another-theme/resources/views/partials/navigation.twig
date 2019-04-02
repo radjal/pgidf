@@ -1,0 +1,62 @@
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url("/") }}">
+                {# config_get("streams::distribution.name") #}
+                <span class="hidden-xs hidden-sm">{{ config('app.name') }}</span>
+                {# image("theme::img/icon.svg").height("50")|raw #}
+                {{ image("theme::img/favicon.png").height("50")|raw }}
+            </a>
+            <div class="carttotal top"></div>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+            <ul class="nav navbar-nav navbar-right">
+				<!-- top menu --> 
+                    {#{{ menu('header').listClass('list list-unstyled').cache({'namespace': 'user'}).render()|raw }}#}
+
+                    {% for link in links('header').cache({'namespace': 'user'}).user().get() %} 
+				<li>
+						<a href="{{ link.url }}">{{ link.title }}</a> 
+				</li> 
+                    {% endfor %}
+				<!-- end top menu --> 
+                <!--<li>
+                    <a href="{{ url_route('anomaly.module.posts::posts.index') }}">Posts</a>
+                </li>-->
+                {%if false%}
+                <li>
+                    {% if auth_check() %}
+                        <a href="{{ url_route('anomaly.module.users::logout') }}" title="Déconnexion"><i class="glyphicon glyphicon-off"></i><!--Déconnexion--></a>
+                    {% else %}
+                        <a href="{{ url_route('anomaly.module.users::login') }}" title="Connexion"><i class="glyphicon glyphicon-user"></i><!--Connection--></a>
+                    {% endif %}
+                </li>
+                {% endif %}
+			
+            </ul> 
+
+            {# structure()
+            .linkAttributesDropdown({'data-toggle': 'dropdown'})
+            .listClass('nav navbar-nav navbar-right')
+            .childListClass('dropdown-menu')
+            .cache({'namespace': 'user'})
+            .render()|raw #}
+        </div>
+        <!-- /.navbar-collapse -->
+
+    </div>
+    <!-- /.container-fluid -->
+</nav>

@@ -1,0 +1,64 @@
+<!-- Footer -->
+<footer class="text-center">
+    <div class="footer-above">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col col-md-4">
+                   <!--  footer menu --> 
+                    {{ menu('footer').listClass('list list-unstyled').cache({'namespace': 'user'}).render()|raw }}
+<!--
+                    {% for link in links('footer').cache({'namespace': 'user'}).user().get() %}
+                        <p>
+                            <a href="{{ link.url }}">{{ link.title }}</a>
+                        </p>
+                    {% endfor %}
+--> 
+                    <ul class="list list-unstyled">
+                        <li>&nbsp;</li>
+                    {% if auth_user().hasAnyRole(['admin', 'gestionnaire']) %} 
+                        <li>
+                            <a href="{{ url_secure("gestion") }}" title="Déconnexion">Gestion <i class="glyphicon glyphicon-cog"></i> </a>
+                        </li>
+                    {% endif %}
+                    {% if auth_check() %}
+                        <li>Bonjour {{ auth_user().display_name }}</li>
+                        <li>
+                            <a href="{{ url_route('anomaly.module.users::logout') }}" title="Déconnexion">Déconnexion <i class="glyphicon glyphicon-off"></i> </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_route('anomaly.module.users::login') }}" title="Connexion">Connexion <i class="glyphicon glyphicon-user"></i> </a>
+                        </li>
+                    {% endif %}
+                    </ul>    
+                </div>
+                <div class="footer-col col-md-4">
+                    <!-- social -->
+                    <ul class="list-inline">
+                        <li>
+                            <a href="{{ variable('info', 'facebook_url') }}" class="btn-social btn-outline">
+                                <i class="fa fa-fw fa-facebook"></i>
+                            </a>
+                        </li> 
+                    </ul>
+                </div>
+                <div class="footer-col col-md-4">
+                    <!-- <h3>{{ config('app.name') }}</h3> -->
+                    <p>{{ config('app.description') }}</p>
+ 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-below">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    Copyright &copy; {{ config('app.name') }} {{ 'now'|date("Y") }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer>

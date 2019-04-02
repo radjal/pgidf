@@ -1,0 +1,83 @@
+/**    Created on : 28 oct. 2018, 12:48:48     Author : Radja */
+/************************ theme overrides ***************************************/ 
+body {
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #604b26;
+    background: #C4EC6D;
+    background: linear-gradient(190deg, #C4EC6D 30%, #79AF43 69%);
+    background: linear-gradient(190deg, #C4EC6D 30%, #79AF43 69%);
+    background: linear-gradient(190deg, #C4EC6D 30%, #79AF43 69%);
+    background: linear-gradient(190deg, #C4EC6D 30%, #79AF43 69%);
+    background: linear-gradient(190deg, #C4EC6D 30%, #79AF43 69%);
+    background-image: url(/files/images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+} 
+#content > .container {
+    background-color: rgba(255, 255, 255, 1);
+    padding-top: 118px;
+    padding-bottom: 50px;
+}
+nav.navbar.navbar-default.navbar-fixed-top.navbar-shrink,
+footer.text-center, .navbar-default {
+    background-color: #6B542A;
+    border-bottom: 8px solid rgba(0, 0, 0, 0.1);
+}
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: #24ce7b;
+}
+.navbar-brand span {
+    font-family: 'Satisfy', cursive;
+    text-transform: initial;
+    font-size: 40px;
+    color: #b3c62c;
+    top: -7px;
+    padding-left: 8px;
+}
+/*********************** homepage ***********************/
+.home .card-body p {
+    display: block;
+    font-size: 20px;
+    color: rgb(88, 107, 33);
+}
+.home h3.text-center {
+    color: #b3c62c;
+}
+.home h3.text-center span{ 
+}
+/*********************** carousel ***********************/
+.carousel-control.right, .carousel-control.left {
+    background-image: none;
+}
+/*********************** navbar ***********************/
+.navbar-default .navbar-toggle {
+    border-color: #604b26;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: #6b542a;
+}
+/*********************** footer ***********************/
+footer .footer-above {
+    background-color: #6B542A;
+}
+footer .footer-below {
+    padding: 25px 0;
+    background-color: #4a3a1d;
+}
+
+/************************** start responsive ************************************/ 
+@media screen and (max-width: 767px) {
+    .navbar-header img {
+        top: -10px;
+        position: relative;
+        float: left;
+    }
+    body { 
+        background-image: none;  
+    } 
+    #content > .container {
+    padding-top: 68px;
+}
+}
+/************************** end responsive ************************************/
+

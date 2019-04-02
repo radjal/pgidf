@@ -1,0 +1,383 @@
+{# storage\streams\pgidf\pages\types\4\layout.twig #}
+{# HOMEPAGE #}  
+{# ############# IMAGES ################ #}
+<noscript>
+<h1>Vous devez activer JavaScript</h1>
+
+{# ########### gallerie = 16 ########## #}
+{# get setting #}
+{% set showimages = entries('pages', 'pages').where('id', 16).first() %}
+{# get data for slideshow #}
+{% set images = entries('pages', 'pages').where('parent_id', 16).get() %}
+</noscript>
+<!-- CSS inline -->
+<style>
+.home .glyphicon-calendar {
+    font-size: xx-large;
+    color: #b3c62c;
+    position: relative;    
+    /* left: 230px; */
+    top: -3px;
+    float: left;
+}
+/* slideshow */
+.carousel-caption {
+    color: #614c26;
+    /* color: transparent; */
+    background: #2d2516;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;
+    text-shadow: 0px 3px 3px rgba(255,255,255,0.5);
+    /* padding-bottom: 60px; */
+    font-family: 'Satisfy', cursive !important;
+}
+.carousel-caption h1 {
+    font-family: 'Satisfy', cursive;
+    text-transform: initial;
+}
+.carousel-caption p {
+} 
+/* main page */
+h1.text-center, h2.text-center, .featurette h2 {
+    font-family: 'Satisfy', cursive;
+    text-transform: initial;
+}
+@media screen and (max-width: 767px) {
+	.home .glyphicon-calendar {
+		position: initial; 
+		float: initial;
+	}
+}
+@media (min-width: 992px) {
+	.home .glyphicon-calendar { 
+		left: 45px;
+	} 
+}
+</style>
+{# bs3 #}
+{# dump(showimages.enabled.value) #}
+{%if showimages.enabled.value %}
+<div id="carousel-example-generic" class="carousel slide row" data-ride="carousel"> 
+        <ol class="carousel-indicators">
+          {% for img in images %}   
+                    <li data-target="#carousel-example-generic" data-slide-to="{{ loop.index0 }}"></li>
+          {% endfor %}  
+        </ol>
+        <div class="carousel-inner" role="listbox">
+          {% for img in images %}   
+                    <div class="item {% if done !=1 %}active{% endif %}">
+                                <img src="{{ img.image_page.url()|raw}}" alt="{{ img.title }}">
+                                <div class="carousel-caption">
+                                    {{ img.content|raw }}
+                                </div>
+                    </div> 
+          {% set done =1 %}
+          {% endfor %} 
+        </div>
+        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+</div>
+{%endif%}
+          
+{# ############# JOURS OUVERTS / ACCUEIL ################ #}
+{# home = 33 #} 
+{% set home = entries('pages', 'pages').where('id', 33).get()  %}
+{% for page in home %}  
+    {%if page.enabled %}
+        {{ page.raw_text|raw }}
+        {{ page.content|raw }}
+    {%endif%} 
+{% endfor %}  
+
+{# ############## OUVERTURE #################### #}
+{% set o = entries('variables', 'ouverture').first()  %}
+
+<div class="row home text-center">
+        {# ############# LUNDI ################ #}
+        {% if (o.h_lun_matin_debut|length > 0 and o.h_lun_matin_fin|length > 0 )
+                                or 
+        (o.h_lun_aprem_fin|length > 0     and o.h_lun_aprem_fin|length > 0) %} 
+            <div class="col-xs-6 col-sm-4">
+                <div class="card mb-4 shadow-sm"> 
+                    <div class="card-body">
+                        <em class="glyphicon glyphicon-calendar"></em>
+                        <h3 class="text-center">Lundi</h3>
+                        <p>
+                            {{ (o.h_lun_matin_fin.value|length>0) ? o.h_lun_matin_debut.date('H:i')  ~' à ' ~ o.h_lun_matin_fin.date('H:i'):'' }}   
+                            {{ (o.h_lun_matin_debut.value|length>0) and (o.h_lun_aprem_fin|length>0) ? '<br>et' :''}}
+                            {{ (o.h_lun_aprem_fin.value|length>0) ? o.h_lun_aprem_debut.date('H:i')  ~' à ' ~ o.h_lun_aprem_fin.date('H:i'):'' }}   
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %} 
+        {# ############# MARDI ################ #}
+        {% if (o.h_mar_matin_debut|length > 0 and o.h_mar_matin_fin|length > 0 )
+                                or 
+        (o.h_mar_aprem_fin|length > 0     and o.h_mar_aprem_fin|length > 0) %}  
+            <div class="col-xs-6 col-sm-4">
+                <div class="card mb-4 shadow-sm"> 
+                    <div class="card-body">
+                        <em class="glyphicon glyphicon-calendar"></em>
+                        <h3 class="text-center">Mardi</h3>
+                        <p>
+                            {{ (o.h_mar_matin_fin.value|length>0) ? o.h_mar_matin_debut.date('H:i')  ~' à ' ~ o.h_mar_matin_fin.date('H:i'):'' }}
+                            {{ (o.h_mar_matin_debut.value|length>0) and (o.h_mar_aprem_fin|length>0) ? '<br>et' :''}}
+                            {{ (o.h_mar_aprem_fin.value|length>0) ? o.h_mar_aprem_debut.date('H:i')  ~' à ' ~ o.h_mar_aprem_fin.date('H:i'):'' }}  
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {# ############# MERCREDI ################ #}  
+        {% if (o.h_mer_matin_debut|length > 0 and o.h_mer_matin_fin|length > 0 )
+                                or 
+        (o.h_mer_aprem_fin|length > 0     and o.h_mer_aprem_fin|length > 0) %} 
+            <div class="col-xs-6 col-sm-4">
+                <div class="card mb-4 shadow-sm"> 
+                    <div class="card-body">
+                        <em class="glyphicon glyphicon-calendar"></em>
+                        <h3 class="text-center">Mercredi</h3>
+                        <p>
+                            {{ (o.h_mer_matin_fin.value|length>0) ? o.h_mer_matin_debut.date('H:i')  ~' à ' ~ o.h_mer_matin_fin.date('H:i'):'' }}
+                            {{ (o.h_mer_matin_debut.value|length>0) and (o.h_mer_aprem_fin|length>0) ? '<br>et' :''}}
+                            {{ (o.h_mer_aprem_fin.value|length>0) ? o.h_mer_aprem_debut.date('H:i')  ~' à ' ~ o.h_mer_aprem_fin.date('H:i'):'' }}     
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {# ############# JEUDI ################ #}
+        {% if (o.h_jeu_matin_debut|length > 0 and o.h_jeu_matin_fin|length > 0 )
+                                or 
+        (o.h_jeu_aprem_fin|length > 0     and o.h_jeu_aprem_fin|length > 0) %}
+            <div class="col-xs-6 col-sm-4">
+                <div class="card mb-4 shadow-sm"> 
+                    <div class="card-body">
+                        <em class="glyphicon glyphicon-calendar"></em>
+                        <h3 class="text-center">Jeudi </h3>
+                        <p>
+                            {{ (o.h_jeu_matin_fin.value|length>0) ? o.h_jeu_matin_debut.date('H:i')  ~' à ' ~ o.h_jeu_matin_fin.date('H:i'):'' }}
+                            {{ (o.h_jeu_matin_debut.value|length>0) and (o.h_jeu_aprem_fin|length>0) ? '<br>et' :''}}
+                            {{ (o.h_jeu_aprem_fin.value|length>0) ? o.h_jeu_aprem_debut.date('H:i')  ~' à ' ~ o.h_jeu_aprem_fin.date('H:i'):'' }}  
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {# ############# VENDREDI ################ #}
+        {% if (o.h_ven_matin_debut|length > 0 and o.h_ven_matin_fin|length > 0 )
+                                or 
+        (o.h_ven_aprem_fin|length > 0     and o.h_ven_aprem_fin|length > 0) %} 
+            <div class="col-xs-6 col-sm-4">
+              <div class="card mb-4 shadow-sm"> 
+                <div class="card-body">
+                    <em class="glyphicon glyphicon-calendar"></em>
+                    <h3 class="text-center">Vendredi </h3>
+                    <p>
+                        {{ (o.h_ven_matin_fin.value|length>0) ? o.h_ven_matin_debut.date('H:i')  ~' à ' ~ o.h_ven_matin_fin.date('H:i'):'' }}
+                        {{ (o.h_ven_matin_debut.value|length>0) and (o.h_ven_aprem_fin|length>0) ? '<br>et' :''}}
+                        {{ (o.h_ven_aprem_fin.value|length>0) ? o.h_ven_aprem_debut.date('H:i')  ~' à ' ~ o.h_ven_aprem_fin.date('H:i'):'' }}  
+                    </p>
+                </div>
+              </div>
+            </div> 
+        {% endif %}
+        {# ############# SAMEDI ################ #}
+        {% if (o.h_sam_matin_debut|length > 0 and o.h_sam_matin_fin|length > 0 )
+                                or 
+        (o.h_sam_aprem_fin|length > 0     and o.h_sam_aprem_fin|length > 0) %}
+            <div class="col-xs-6 col-sm-4">
+              <div class="card mb-4 shadow-sm"> 
+                <div class="card-body">
+                    <em class="glyphicon glyphicon-calendar"></em>
+                    <h3 class="text-center">Samedi </h3> 
+                    <p>
+                        {{ (o.h_sam_matin_debut.value|length>0) ? o.h_sam_matin_debut.date('H:i')  ~' à ' ~ o.h_sam_matin_fin.date('H:i') :'' }}
+                        {{ (o.h_sam_matin_debut.value|length>0) and (o.h_sam_aprem_fin|length>0) ? '<br>et' :''}}
+                        {{ (o.h_sam_aprem_fin.value|length>0) ? o.h_sam_aprem_debut.date('H:i')  ~' à ' ~ o.h_sam_aprem_fin.date('H:i') :'' }}  
+                    </p>
+                </div>
+              </div>
+            </div> 
+        {% endif %}
+        {# ############# DIMANCHE ################ #}
+        {% if (o.h_dim_matin_debut|length > 0 and o.h_dim_matin_fin|length > 0 )
+                            or 
+        (o.h_dim_aprem_fin|length > 0     and o.h_dim_aprem_fin|length > 0) %} 
+            <div class="col-xs-6 col-sm-4">
+                <div class="card mb-4 shadow-sm"> 
+                    <div class="card-body">
+                        <em class="glyphicon glyphicon-calendar"></em>
+                        <h3 class="text-center">Dimanche </h3> 
+                        <p>
+                            {{ (o.h_dim_matin_debut.value|length>0) ? o.h_dim_matin_debut.date('H:i')  ~' à ' ~ o.h_dim_matin_fin.date('H:i') :'' }}
+                            {{ (o.h_dim_matin_debut.value|length>0) and (o.h_dim_aprem_fin|length>0) ? '<br>et' :''}} 
+                            {{ (o.h_dim_aprem_fin.value|length>0) ? o.h_dim_aprem_debut.date('H:i')  ~' à ' ~ o.h_dim_aprem_fin.date('H:i') :'' }}  
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endif %} 
+</div>
+<p>&nbsp; </p> 
+
+{# ############# TELEPHONE ################ #}
+{# telephone = 41 #} {% set telephone = entries('pages', 'pages').where('id', 41).get()  %} 
+{% for page in telephone %}  
+{%if page.enabled.value %}
+                {{ page.content|raw }}
+{% endif %} 
+{% endfor %} 
+<!--
+<div class="row"> 
+          <div class="col-md-12">
+            <h2 class="featurette-heading">
+                N'hésitez pas à appeler
+                <a class="btn btn-lg btn-success" href="tel:{{ variable('info', 'numero_de_telephone') }}"><i class="glyphicon glyphicon-earphone"></i>&nbsp;&nbsp;{{ variable('info', 'numero_de_telephone') }}</a>
+            </h2>
+          </div>
+</div> 
+-->
+            
+<p>&nbsp; </p>  
+{# ########### DESCRIPTION ################## #} 
+{# description = 38 #} {% set desc = entries('pages', 'pages').where('id', 38).get()  %}
+{% for page in desc %} 
+{%if page.enabled.value %}
+<div class="row featurette">
+          <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading">
+                {{ page.content|raw }}
+          </div>
+          <div class="col-md-5 order-md-1"> 
+              {{ page.raw_text|raw }}
+          </div>
+</div>
+{% endif %} 
+{% endfor %} 
+ 
+<p>&nbsp; </p>
+{# ############# ACCES ################ #} 
+{# ACCES = 39 #} {% set acces = entries('pages', 'pages').where('id', 39).get()  %}
+{% for page in acces %} 
+{% if page.enabled.value %}
+<div class="row featurette">
+    {# page.raw_text #}
+  <div class="col-md-5 order-md-1"> 
+        <iframe src="{{ variable('info', 'maps_iframe_url') }}" width="100%" height="350" frameborder="0" style="border:0" allowfullscreen="" class="img-thumbnail"></iframe>
+  </div> 
+  <div class="col-md-7 order-md-2">
+    {{ page.content|raw }}
+  </div>
+</div>
+{% endif %} 
+{% endfor %}  
+
+
+{# ############# JOURS OUVERTS ################ #}
+{# 
+<pre> OUVERTURE
+
+lundi
+    {% if (o.h_lun_matin_debut|length > 0 and o.h_lun_matin_fin|length > 0 )
+                            or 
+    (o.h_lun_aprem_fin|length > 0     and o.h_lun_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_lun_matin_debut.date('H:i')  ~' à ' ~ o.h_lun_matin_fin.date('H:i') }}
+            {{ (o.h_lun_matin_debut.value|length>0) and (o.h_lun_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_lun_aprem_debut.date('H:i')  ~' à ' ~ o.h_lun_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_lun_matin_debut') }}
+    {{ variable('ouverture', 'h_lun_matin_fin') }}
+    {{ variable('ouverture', 'h_lun_aprem_debut') }}
+    {{ variable('ouverture', 'h_lun_aprem_fin') }} 
+mardi
+    {% if (o.h_mar_matin_debut|length > 0 and o.h_mar_matin_fin|length > 0 )
+                            or 
+    (o.h_mar_aprem_fin|length > 0     and o.h_mar_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_mar_matin_debut.date('H:i')  ~' à ' ~ o.h_mar_matin_fin.date('H:i') }}
+            {{ (o.h_mar_matin_debut.value|length>0) and (o.h_mar_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_mar_aprem_debut.date('H:i')  ~' à ' ~ o.h_mar_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_mar_matin_debut') }}
+    {{ variable('ouverture', 'h_mar_matin_fin') }}
+    {{ variable('ouverture', 'h_mar_aprem_debut') }}
+    {{ variable('ouverture', 'h_mar_aprem_fin') }} 
+mercredi
+    {% if (o.h_mer_matin_debut|length > 0 and o.h_mer_matin_fin|length > 0 )
+                            or 
+    (o.h_mer_aprem_fin|length > 0     and o.h_mer_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_mer_matin_debut.date('H:i')  ~' à ' ~ o.h_mer_matin_fin.date('H:i') }}
+            {{ (o.h_mer_matin_debut.value|length>0) and (o.h_mer_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_mer_aprem_debut.date('H:i')  ~' à ' ~ o.h_mer_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_mer_matin_debut') }}
+    {{ variable('ouverture', 'h_mer_matin_fin') }}
+    {{ variable('ouverture', 'h_mer_aprem_debut') }}
+    {{ variable('ouverture', 'h_mer_aprem_fin') }} 
+jeudi
+    {% if (o.h_jeu_matin_debut|length > 0 and o.h_jeu_matin_fin|length > 0 )
+                            or 
+    (o.h_jeu_aprem_fin|length > 0     and o.h_jeu_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_jeu_matin_debut.date('H:i')  ~' à ' ~ o.h_jeu_matin_fin.date('H:i') }}
+            {{ (o.h_jeu_matin_debut.value|length>0) and (o.h_jeu_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_jeu_aprem_debut.date('H:i')  ~' à ' ~ o.h_jeu_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_jeu_matin_debut') }}
+    {{ variable('ouverture', 'h_jeu_matin_fin') }}
+    {{ variable('ouverture', 'h_jeu_aprem_debut') }}
+    {{ variable('ouverture', 'h_jeu_aprem_fin') }} 
+vendredi
+    {% if (o.h_ven_matin_debut|length > 0 and o.h_ven_matin_fin|length > 0 )
+                            or 
+    (o.h_ven_aprem_fin|length > 0     and o.h_ven_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_ven_matin_debut.date('H:i')  ~' à ' ~ o.h_ven_matin_fin.date('H:i') }}
+            {{ (o.h_ven_matin_debut.value|length>0) and (o.h_ven_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_ven_aprem_debut.date('H:i')  ~' à ' ~ o.h_ven_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_ven_matin_debut') }}
+    {{ variable('ouverture', 'h_ven_matin_fin') }}
+    {{ variable('ouverture', 'h_ven_aprem_debut') }}
+    {{ variable('ouverture', 'h_ven_aprem_fin') }} 
+samedi
+    {% if (o.h_sam_matin_debut|length > 0 and o.h_sam_matin_fin|length > 0 )
+                            or 
+    (o.h_sam_aprem_fin|length > 0     and o.h_sam_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_sam_matin_debut.date('H:i')  ~' à ' ~ o.h_sam_matin_fin.date('H:i') }}
+            {{ (o.h_sam_matin_debut.value|length>0) and (o.h_sam_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_sam_aprem_debut.date('H:i')  ~' à ' ~ o.h_sam_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_sam_matin_debut') }}
+    {{ variable('ouverture', 'h_sam_matin_fin') }}
+    {{ variable('ouverture', 'h_sam_aprem_debut') }}
+    {{ variable('ouverture', 'h_sam_aprem_fin') }} 
+dimanche
+    {% if (o.h_dim_matin_debut|length > 0 and o.h_dim_matin_fin|length > 0 )
+                            or 
+    (o.h_dim_aprem_fin|length > 0     and o.h_dim_aprem_fin|length > 0) %}
+            jour ouvert! 
+            {{ o.h_dim_matin_debut.date('H:i')  ~' à ' ~ o.h_dim_matin_fin.date('H:i') }}
+            {{ (o.h_dim_matin_debut.value|length>0) and (o.h_dim_aprem_fin|length>0) ? '<br>et' :''}}
+            {{ o.h_dim_aprem_debut.date('H:i')  ~' à ' ~ o.h_dim_aprem_fin.date('H:i') }}  
+    {% endif %}
+    {{ variable('ouverture', 'h_dim_matin_debut') }}
+    {{ variable('ouverture', 'h_dim_matin_fin') }}
+    {{ variable('ouverture', 'h_dim_aprem_debut') }}
+    {{ variable('ouverture', 'h_dim_aprem_fin') }} 
+
+</pre>
+    
+#}

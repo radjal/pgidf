@@ -1,0 +1,52 @@
+<!-- OVERRIDE CONTACT PLUGIN VIEW --> 
+{# Fixed html view #}  
+
+{% set body_css = "
+    color: rgb(107, 84, 42);
+    background-color: rgb(239, 239, 239);
+    padding: 0px;" %}
+{% set head_css = "
+    color: rgb(255, 255, 255);
+    background-color: rgb(107, 84, 42);
+    padding: 10px;" %}
+{% set title_css = "
+    padding: 0px 10px;
+    margin: 4px;" %}
+{% set list_css = "
+    color: rgb(107, 84, 42);
+    background-color: rgb(255, 255, 255);
+    padding: 4px;
+    margin: 12px;
+    border-radius: 6px;
+    font-size: 18px;" %}
+    
+<style>
+    div>p {
+        margin: 4px;
+        padding-bottom: 4px;
+        font-size: 12px;
+    } 
+</style>
+
+{# HTML body #}  
+<div style="{{body_css}}">
+    
+<h1 style="{{head_css}}">COMMANDE INTERNET</h1>   
+
+<h3 style="{{title_css}}">Pour {{ fields.date | date("Y/m/d")  }}</h3>  
+
+<h3 style="{{title_css}}">Nom: {{ fields.name }}</h3>  
+
+{% if fields.mobile %}<h3 style="{{title_css}}">Mobile: {{ fields.mobile }}</h3>{% endif %}  
+{% if fields.email %}<h3 style="{{title_css}}">Email: {{ fields.email     }}</h3>{% endif %}  
+{% if fields.date.value %}<h3 style="{{title_css}}">Date:{{ fields.date }}</h3>{% endif %}  
+<div style="{{list_css}}">{{ fields.comment|raw }}</div>  
+
+{# xtra #} 
+<hr>
+<p style="padding:4px;">
+    IP: {{ request_ip() }}
+    <br>
+    Depuis: <a href="{{ url_previous() }}">{{ url_previous() }}</a>
+</p>
+</div>
